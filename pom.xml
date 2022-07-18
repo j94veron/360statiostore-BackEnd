@@ -9,11 +9,16 @@
 		<version>2.1.5.RELEASE</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.example</groupId>
-	<artifactId>demo-crud</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>demo-crud</name>
-	<description>Demo project for Spring Boot</description>
+	<groupId>com.ar.ecommerce</groupId>
+	<artifactId>api-360statiostore</artifactId>
+	<version>1.0</version>
+	<name>360stationstore</name>
+	<description>Api Rest</description>
+	<properties>
+		<java.version>11</java.version>
+		<swagger.version>2.9.2</swagger.version>
+	</properties>
+
 	
 	<dependencies>
 		<dependency>
