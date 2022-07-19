@@ -35,7 +35,6 @@ public class Orders {
 	private String name_product;
 	
 	@Column
-	@NotBlank
 	private String made_product;
 	
 	@Column
