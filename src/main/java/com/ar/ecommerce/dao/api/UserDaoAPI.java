@@ -10,7 +10,7 @@ import com.ar.ecommerce.model.Customer;
 
 public interface UserDaoAPI extends CrudRepository<Customer, Long> {
 	
-	@Query("select u from Customer u where LOWER(u.username) =:username")
+	@Query("select u from Customer u where LOWER(u.username) = LOWER(:username)")
 	Optional<Customer> findByUsername(@Param("username") String username);
 
 }

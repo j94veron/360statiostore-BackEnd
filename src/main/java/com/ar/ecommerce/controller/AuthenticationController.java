@@ -1,11 +1,13 @@
 package com.ar.ecommerce.controller;
 
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -44,7 +46,6 @@ public class AuthenticationController {
 	public ResponseEntity<LoginDTO> authenticate(@RequestBody @Validated FormLoginDTO request) {
 		Customer user = usuarioService.findByUserName(request.getUsername());
 		UsernamePasswordAuthenticationToken auhtenToken = getSecurityUser(user, request.getPassword());
-		//authenticationManager.authenticate(getSecurityUser(user, auth.getPassword()));
 		SecurityContextHolder.getContext().setAuthentication(auhtenToken);
 		Map<String, String> tokenMap = jwtProvider.createToken(auhtenToken);
 		return ResponseEntity.ok(new LoginDTO(user.getUsername(), tokenMap.get("token"), tokenMap.get("refresh_token"), user.getName(), user.getSurname(), user.getRole(), user.getAddress(), user.getEmail(), user.getPhone() ));
@@ -55,12 +56,12 @@ public class AuthenticationController {
 		return ResponseEntity.ok(jwtProvider.createToken(authentication));
 	}
 	
-	private UsernamePasswordAuthenticationToken getSecurityUser(Customer user, String password) {
-		/*if (user.isActive())) {
-			throw new UserNotActivatedException("User " + user.getId() + " was not activated");
-		}*/
-		
+	private UsernamePasswordAuthenticationToken getSecurityUser(Customer user, String password) {	
+		String passwordDecryt = new String(Base64.getDecoder().decode(user.getPassword()));
+		if (!passwordDecryt.equals(password)) {
+			 throw new BadCredentialsException("User/password incorrectas.");
+		}
 		List<GrantedAuthority> grantedAuthorities = List.of(new SimpleGrantedAuthority(user.getRole()));
-		return new UsernamePasswordAuthenticationToken(new CustomUserDetails(user.getUsername(), password, grantedAuthorities), user.getId(), grantedAuthorities);
+		return new UsernamePasswordAuthenticationToken(new CustomUserDetails(user.getUsername(), passwordDecryt, grantedAuthorities), user.getId(), grantedAuthorities);
 	}
 }
