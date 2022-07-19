@@ -38,6 +38,9 @@ public class Orders {
 	private String made_product;
 	
 	@Column
+	private String typedesign;
+
+	@Column
 	@NotBlank
 	private String category_product;
 	
@@ -46,7 +49,6 @@ public class Orders {
 	private String shipping;
 	
 	@Column
-	@NotBlank
 	private String address_user;
 	
 	@Column
@@ -67,6 +69,14 @@ public class Orders {
 	@Column
 	@NotBlank
 	private String active;
+	
+	public String getTypedesign() {
+		return typedesign;
+	}
+
+	public void setTypedesign(String typedesign) {
+		this.typedesign = typedesign;
+	}
 
 	public Long getId() {
 		return id;

@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ar.ecommerce.dao.api.CustomerDaoAPI;
 import com.ar.ecommerce.model.Customer;
 import com.ar.ecommerce.service.api.CustomerServiceAPI;
 
@@ -30,8 +29,6 @@ public class CustomerRestController {
 	@Autowired
 	private CustomerServiceAPI customerServiceAPI;
 	
-	@Autowired
-	private CustomerDaoAPI customerDaoApi;
 
 	@GetMapping
 	public List<Customer> getAll() {
@@ -45,9 +42,8 @@ public class CustomerRestController {
 
 	@PostMapping
 	public ResponseEntity<Customer> save(@RequestBody @Valid Customer customer) {
-		Optional<Customer> optional = customerDaoApi.findByUsername(customer.getUsername());
-		
-		if (optional.isEmpty()) { 
+		Optional<Customer> optional = customerServiceAPI.findByUserName(customer.getUsername());
+		if (optional.isPresent()) { 
 			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 		}
 		Customer obj = customerServiceAPI.save(customer);
